@@ -1,0 +1,20 @@
+namespace com.linkedin.common
+
+/**
+ * Ownership information of an entity.
+ */
+@Aspect = {
+  "name": "ownership"
+}
+record Ownership {
+
+  /**
+   * List of owners of the entity.
+   */
+  owners: array[Owner]
+
+  /**
+   * Audit stamp containing who last modified the record and when.
+   */
+  lastModified: AuditStamp
+}

@@ -1,0 +1,120 @@
+query getBrowsePaths($input: BrowsePathsInput!) {
+    browsePaths(input: $input) {
+        path
+    }
+}
+
+query getBrowseResults($input: BrowseInput!) {
+    browse(input: $input) {
+        entities {
+            urn
+            type
+            ... on Dataset {
+                name
+                origin
+                description
+                platform {
+                    name
+                    info {
+                        logoUrl
+                    }
+                }
+                tags
+                ownership {
+                    ...ownershipFields
+                }
+                globalTags {
+                    ...globalTagsFields
+                }
+            }
+            ... on Dashboard {
+                urn
+                type
+                tool
+                dashboardId
+                info {
+                    name
+                    description
+                    externalUrl
+                    access
+                    lastModified {
+                        time
+                    }
+                }
+                ownership {
+                    ...ownershipFields
+                }
+                globalTags {
+                    ...globalTagsFields
+                }
+            }
+            ... on GlossaryTerm {
+                name
+                ownership {
+                    ...ownershipFields
+                }
+                glossaryTermInfo {
+                    definition
+                    termSource
+                    sourceRef
+                    sourceUrl
+                    customProperties {
+                        key
+                        value
+                    }
+                }
+            }
+            ... on Chart {
+                urn
+                type
+                tool
+                chartId
+                info {
+                    name
+                    description
+                    externalUrl
+                    type
+                    access
+                    lastModified {
+                        time
+                    }
+                }
+                ownership {
+                    ...ownershipFields
+                }
+                globalTags {
+                    ...globalTagsFields
+                }
+            }
+            ... on DataFlow {
+                urn
+                type
+                orchestrator
+                flowId
+                cluster
+                info {
+                    name
+                    description
+                    project
+                }
+                ownership {
+                    ...ownershipFields
+                }
+                globalTags {
+                    ...globalTagsFields
+                }
+            }
+        }
+        start
+        count
+        total
+        metadata {
+            path
+            groups {
+                name
+                count
+            }
+            totalNumEntities
+        }
+    }
+}

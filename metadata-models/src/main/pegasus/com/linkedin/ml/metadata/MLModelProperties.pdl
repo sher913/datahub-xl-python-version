@@ -1,0 +1,56 @@
+namespace com.linkedin.ml.metadata
+
+import com.linkedin.common.MLFeatureUrn
+import com.linkedin.common.Time
+import com.linkedin.common.VersionTag
+
+/**
+ * Properties associated with a ML Model
+ */
+@Aspect = {
+  "name": "mlModelProperties"
+}
+record MLModelProperties {
+
+  /**
+   * Documentation of the MLModel
+   */
+  @Searchable = {
+    "fieldType": "TEXT",
+    "hasValuesFieldName": "hasDescription"
+  }
+  description: optional string
+
+  /**
+   * Date when the MLModel was developed
+   */
+  date: optional Time
+
+  /**
+   * Version of the MLModel
+   */
+  version: optional VersionTag
+
+  /**
+   * Type of Algorithm or MLModel such as whether it is a Naive Bayes classifier, Convolutional Neural Network, etc
+   */
+  @Searchable = {
+    "fieldType": "TEXT_PARTIAL"
+  }
+  type: optional string
+
+  /**
+   * Hyper Parameters of the MLModel
+   */
+  hyperParameters: optional map[string, HyperParameterValueType]
+
+  /**
+   * List of features used for MLModel training
+   */
+  mlFeatures: optional array[MLFeatureUrn]
+
+  /**
+   * Tags for the MLModel
+   */
+  tags: array[string] = [ ]
+}

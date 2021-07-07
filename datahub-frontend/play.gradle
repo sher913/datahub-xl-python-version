@@ -1,0 +1,84 @@
+apply plugin: 'play'
+
+// Change this to listen on a different port
+project.ext.httpPort = 9001
+project.ext.playBinaryBaseName = "datahub-frontend"
+
+tasks.withType(PlayRun) {
+  httpPort = project.ext.httpPort
+}
+
+configurations {
+  assets
+}
+
+dependencies {
+  if (project.hasProperty('enableEmber') && project.getProperty('enableEmber').toBoolean()) {
+    assets project(path: ':datahub-web', configuration: 'assets')
+  } else {
+    assets project(path: ':datahub-web-react', configuration: 'assets')
+  }
+  play project(":datahub-dao")
+  play project(":datahub-graphql-core")
+
+  play externalDependency.graphqlJava
+  play externalDependency.antlr4Runtime
+  play externalDependency.antlr4
+
+  play externalDependency.jerseyCore
+  play externalDependency.jerseyGuava
+
+  play externalDependency.pac4j
+  play externalDependency.playPac4j
+  play externalDependency.shiroCore
+  play externalDependency.playCache
+
+  play externalDependency.kafkaClients
+
+  playTest externalDependency.mockito
+  playTest externalDependency.playTest
+
+  playRun externalDependency.lombok
+  playRun externalDependency.guice
+  playRun externalDependency.playDocs
+  playRun externalDependency.playGuice
+  playRun externalDependency.logbackClassic
+}
+
+model {
+  components {
+    play {
+      platform play: '2.6.18', scala: '2.11', java: '1.8'
+      injectedRoutesGenerator = true
+
+      binaries.all {
+        tasks.withType(PlatformScalaCompile) {
+          scalaCompileOptions.forkOptions.jvmArgs = ['-Xms1G', '-Xmx1G', '-Xss2M']
+        }
+      }
+
+      binaries.all { binary ->
+        binary.assets.addAssetDir moveAssets.destinationDir
+        binary.assets.builtBy moveAssets
+      }
+    }
+  }
+  distributions {
+    playBinary {
+      baseName = project.ext.playBinaryBaseName
+    }
+  }
+}
+
+task unzipAssets(type: Copy, dependsOn: configurations.assets) {
+  into "${buildDir}/assets"
+  from {
+    configurations.assets.collect { zipTree(it) }
+  }
+}
+
+// move assets/assets into assets
+task moveAssets(type: Copy, dependsOn: unzipAssets) {
+  into "${buildDir}/assets"
+  from ("${buildDir}/assets/assets")
+}

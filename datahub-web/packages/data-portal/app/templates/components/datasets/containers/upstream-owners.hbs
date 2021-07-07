@@ -1,0 +1,9 @@
+{{#if getUpstreamPropertiesTask.isRunning}}
+
+  <NachoAnimation::PendulumEllipsis />
+
+{{else}}
+
+  <Datasets::UpstreamOwners @nativeName={{nativeName}} @upstreamUrn={{upstreamUrn}} />
+
+{{/if}}

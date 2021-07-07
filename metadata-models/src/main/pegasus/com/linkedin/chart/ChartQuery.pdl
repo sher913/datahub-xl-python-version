@@ -1,0 +1,24 @@
+namespace com.linkedin.chart
+
+/**
+ * Information for chart query which is used for getting data of the chart
+ */
+@Aspect = {
+  "name": "chartQuery"
+}
+record ChartQuery {
+
+  /**
+   * Raw query to build a chart from input datasets
+   */
+  rawQuery: string
+
+  /**
+   * Chart query type
+   */
+  @Searchable = {
+    "fieldType": "KEYWORD",
+    "addToFilters": true
+  }
+  type: ChartQueryType
+}

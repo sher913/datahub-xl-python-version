@@ -1,0 +1,8 @@
+<ConcurrencyTaskStateHandler
+  @task={{getContainerDataTask}}
+  @showLockup={{this.showLockup}}
+  @errorHeading={{@errorHeading}}
+  @customErrorComponent={{@customErrorComponent}}
+>
+  {{yield this.resolved}}
+</ConcurrencyTaskStateHandler>
